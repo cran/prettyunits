@@ -33,24 +33,36 @@ pretty_ms <- function(ms, compact = FALSE) {
 
   stopifnot(is.numeric(ms))
 
-  parsed <- parse_ms(ms) %>% t()
+  parsed <- t(parse_ms(ms))
 
   if (compact) {
     units <- c("d", "h", "m", "s")
     parsed2 <- parsed
     parsed2[] <- paste0(parsed, units)
-    idx <- apply(parsed, 2, first_positive) %>%
-      cbind(seq_len(length(ms)))
-    parsed2[idx] %>%
-      paste0("~", .)
+    idx <- cbind(
+      apply(parsed, 2, first_positive),
+      seq_len(length(ms))
+    )
+    tmp <- paste0("~", parsed2[idx])
+
+    # handle NAs
+    tmp[is.na(parsed2[idx])] <- NA_character_
+    tmp
 
   } else {
 
     ## Exact for small ones
-    exact <- paste0(ceiling(ms), "ms")
+    exact            <- paste0(ceiling(ms), "ms")
+    exact[is.na(ms)] <- NA_character_
 
     ## Approximate for others, in seconds
     merge_pieces <- function(pieces) {
+      ## handle NAs
+      if (all(is.na(pieces))) {
+        return(NA_character_)
+      }
+
+      ## handle non-NAs
       (
         (if (pieces[1]) pieces[1] %+% "d " else "") %+%
         (if (pieces[2]) pieces[2] %+% "h " else "") %+%
@@ -91,17 +103,15 @@ pretty_sec <- function(sec, compact = FALSE) {
 #' @inheritParams pretty_ms
 #' @family time
 #' @export
-#' @importFrom methods is
 #' @examples
 #' pretty_dt(as.difftime(1000, units = "secs"))
 #' pretty_dt(as.difftime(0, units = "secs"))
 
 pretty_dt <- function(dt, compact = FALSE) {
 
-  stopifnot(is(dt, "difftime"))
+  assert_diff_time(dt)
 
   units(dt) <- "secs"
 
-  as.vector(dt) %>%
-    pretty_sec(compact = compact)
+  pretty_sec(as.vector(dt), compact = compact)
 }
