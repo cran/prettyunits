@@ -1,14 +1,14 @@
-aba89fcd66f69a4c45099a80633e4ec1 *DESCRIPTION
+c7e0b31e9c47de40c1a9c11764717ab5 *DESCRIPTION
 3d55ef9a10c04c95a867277c02d32bca *LICENSE
 e3b6961fd55e9711afe7e30b1a78e5a2 *NAMESPACE
-2167ff986b74abb5e791bf6f0794eaee *NEWS.md
+a7471e7edf5e4b9dbce093b473ccb6e4 *NEWS.md
 cd24536daf03c962b517de85b6cf1016 *R/pretty-package.R
-3d809c7eec09dd7c09d49386b23709d5 *R/sizes.R
+fe5d0e7464286dd1e07746d3da593ad9 *R/sizes.R
 8b1e1abfd6f4de3301cb1ff98532e85e *R/time-ago.R
 b622e47328c70c5378d307c885bf26a3 *R/time.R
 241f1dd00186fecb510f552fd310a1ee *R/utils.R
 3846445cefe55584e4a70d4c2e2a938d *R/xsizes-docs.R
-c1ffd6359639f22b642979d69b935322 *README.md
+727c95ce9b6795c96f09aff7e6fe152c *README.md
 a76805eb8e488f0daffe1c81c3c39c53 *man/pretty_bytes.Rd
 ac05527084a6a160e1c53a924f9811cd *man/pretty_dt.Rd
 086cf9b0d216fef2df8e55dfbdae0538 *man/pretty_ms.Rd
@@ -17,6 +17,6 @@ ac05527084a6a160e1c53a924f9811cd *man/pretty_dt.Rd
 1eac8d1f7322001d8a9d4c28e2b32ead *man/time_ago.Rd
 ab8646217bb905043d5da7b6d96bc3af *man/vague_dt.Rd
 d4df5b35b4ce6e070b4980c38847cad3 *tests/testthat.R
-6ebd9ebab6a24cb2bea42b4e0c6578fe *tests/testthat/test-bytes.r
+675e661fec46a342af7362d194bb6765 *tests/testthat/test-bytes.r
 c7ce99540a9d95b591172192553b4511 *tests/testthat/test-ms.r
 50c54d52ed56e60a64709770a7d38412 *tests/testthat/test-vague-dt.r
