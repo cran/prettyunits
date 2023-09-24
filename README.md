@@ -1,15 +1,22 @@
 
 
 
-[![Linux Build Status](https://travis-ci.org/r-lib/prettyunits.svg?branch=master)](https://travis-ci.org/r-lib/prettyunits)
-[![Windows Build status](https://ci.appveyor.com/api/projects/status/github/r-lib/prettyunits?svg=true)](https://ci.appveyor.com/project/gaborcsardi/prettyunits)
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/r-lib/prettyunits/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/prettyunits/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/r-lib/prettyunits/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/prettyunits?branch=main)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/prettyunits)](https://CRAN.R-project.org/package=prettyunits)
-
+<!-- badges: end -->
 
 # prettyunits
 
-The `prettyunits` package formats quantities in human readable form. Currently
-time units and information (i.e. bytes) are supported.
+The `prettyunits` package formats quantities in human readable form.
+* Time intervals: '1337000' -> '15d 11h 23m 20s'.
+* Vague time intervals: '2674000' -> 'about a month ago'.
+* Bytes: '1337' -> '1.34 kB'.
+* Rounding: '99' with 3 significant digits -> '99.0'
+* p-values: '0.00001' -> '<0.0001'.
+* Colors: '#FF0000' -> 'red'.
+* Quantities: '1239437' -> '1.24 M'.
 
 ## Installation
 
@@ -21,10 +28,6 @@ install.packages("prettyunits")
 ```
 
 
-```r
-library(prettyunits)
-library(magrittr)
-```
 
 ## Bytes
 
@@ -91,11 +94,89 @@ uls()
 ```
 
 ```
-##>  d mode        user group     size            modified       name
-##>     644 gaborcsardi staff 440.00 B 2019-03-25 10:25:08    NEWS.md
-##>     644 gaborcsardi staff  4.65 kB 2017-12-15 11:00:16  README.md
-##>     644 gaborcsardi staff  2.95 kB 2019-03-27 09:58:43 README.Rmd
+##>  d mode        user group    size            modified        name
+##>     644 gaborcsardi staff   232 B 2023-09-24 10:37:41 codecov.yml
+##>  d  755 gaborcsardi staff         2023-09-24 10:37:41    data-raw
+##>     644 gaborcsardi staff 1.06 kB 2023-09-24 10:40:32 DESCRIPTION
+##>     644 gaborcsardi staff    42 B 2022-06-17 13:59:46     LICENSE
+##>     644 gaborcsardi staff   111 B 2023-09-23 16:44:21    Makefile
+##>  d  755 gaborcsardi staff         2023-09-24 10:37:59         man
+##>     644 gaborcsardi staff   523 B 2023-09-24 10:39:58   NAMESPACE
+##>     644 gaborcsardi staff 1.46 kB 2023-09-24 10:42:01     NEWS.md
+##>  d  755 gaborcsardi staff         2023-09-24 11:25:00           R
+##>     644 gaborcsardi staff 7.90 kB 2023-09-24 11:27:42   README.md
+##>     644 gaborcsardi staff 4.31 kB 2023-09-24 11:28:23  README.Rmd
+##>  d  755 gaborcsardi staff         2022-06-17 13:59:46       tests
 ```
+
+## Quantities
+
+`pretty_num` formats number related to linear quantities in a human readable way:
+
+```r
+pretty_num(1337)
+```
+
+```
+##> [1] "1.34 k"
+```
+
+```r
+pretty_num(-133337)
+```
+
+```
+##> [1] "-133.34 k"
+```
+
+```r
+pretty_num(1333.37e-9)
+```
+
+```
+##> [1] "1.33 u"
+```
+Be aware that the result is wrong in case of surface or volumes, and for any non-linear quantity.
+
+Here is a simple example of how to prettify a entire tibble
+
+```r
+library(tidyverse)
+```
+
+```
+##> ── Attaching core tidyverse packages ─────────────────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
+##> ✔ dplyr     1.1.2     ✔ readr     2.1.4
+##> ✔ forcats   1.0.0     ✔ stringr   1.5.0
+##> ✔ ggplot2   3.4.2     ✔ tibble    3.2.1
+##> ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+##> ✔ purrr     1.0.1     
+##> ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+##> ✖ tidyr::extract()   masks magrittr::extract()
+##> ✖ dplyr::filter()    masks stats::filter()
+##> ✖ dplyr::lag()       masks stats::lag()
+##> ✖ purrr::set_names() masks magrittr::set_names()
+##> ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+```
+
+```r
+tdf <- tribble( ~name, ~`size in m`, ~`speed in m/s`,
+                "land snail", 0.075, 0.001,
+                "photon", NA,  299792458,
+                "African plate", 10546330, 0.000000000681)
+tdf %>% mutate(across(where(is.numeric), pretty_num))
+```
+
+```
+##> # A tibble: 3 × 3
+##>   name          `size in m` `speed in m/s`
+##>   <chr>         <chr>       <chr>         
+##> 1 land snail    "   75 m"   "     1 m"    
+##> 2 photon        "    NA "   "299.79 M"    
+##> 3 African plate "10.55 M"   "   681 p"
+```
+
+
 
 ## Time intervals
 
@@ -127,8 +208,8 @@ pretty_sec(c(1337, 13370, 133700, 1337000, 13370000))
 ```
 
 ```
-##> [1] "22m 17s"          "3h 42m 50s"       "1d 13h 8m 20s"   
-##> [4] "15d 11h 23m 20s"  "154d 17h 53m 20s"
+##> [1] "22m 17s"          "3h 42m 50s"       "1d 13h 8m 20s"    "15d 11h 23m 20s" 
+##> [5] "154d 17h 53m 20s"
 ```
 
 ```r
@@ -230,4 +311,63 @@ time_ago(now - as.difftime(25, units = "hours"))
 ##> [1] "a day ago"
 ```
 
+## Rounding
 
+`pretty_round()` and `pretty_signif()` preserve trailing zeros.
+
+
+```r
+pretty_round(1, digits=6)
+```
+
+```
+##> [1] "1.000000"
+```
+
+```r
+pretty_signif(c(99, 0.9999), digits=3)
+```
+
+```
+##> [1] "99.0" "1.00"
+```
+
+## p-values
+
+`pretty_p_value()` rounds small p-values to indicate less than significance
+level for small values.
+
+
+```r
+pretty_p_value(c(0.05, 0.0000001, NA))
+```
+
+```
+##> [1] "0.0500"  "<0.0001" NA
+```
+
+## Colors
+
+`pretty_color` converts colors from other representations to human-readable
+names.
+
+
+```r
+pretty_color("black")
+```
+
+```
+##> [1] "black"
+##> attr(,"alt")
+##> [1] "black" "gray0" "grey0" "Black"
+```
+
+```r
+pretty_color("#123456")
+```
+
+```
+##> [1] "Prussian Blue"
+##> attr(,"alt")
+##> [1] "Prussian Blue"
+```

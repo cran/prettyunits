@@ -3,7 +3,34 @@
 \docType{package}
 \name{prettyunits}
 \alias{prettyunits}
+\alias{prettyunits-package}
 \title{Prettier formatting of quantities}
 \description{
-Prettier formatting of quantities
+Render quantities with a pretty, human-readable formatting.
+\itemize{
+\item Time intervals: '1337000' -> '15d 11h 23m 20s'.
+\item Vague time intervals: '2674000' -> 'about a month ago'.
+\item Bytes: '1337' -> '1.34 kB'.
+\item p-values: '0.00001' -> '<0.0001'.
+\item Colors: '#FF0000' -> 'red'.
+\item Quantities: '1239437' -> '1.24 M'.
+}
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/r-lib/prettyunits}
+  \item Report bugs at \url{https://github.com/r-lib/prettyunits/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Gabor Csardi \email{csardi.gabor@gmail.com}
+
+Other contributors:
+\itemize{
+  \item Bill Denney \email{wdenney@humanpredictions.com} (\href{https://orcid.org/0000-0002-5759-428X}{ORCID}) [contributor]
+  \item Christophe Regouby \email{christophe.regouby@free.fr} [contributor]
+}
+
 }
